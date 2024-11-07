@@ -1,42 +1,42 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-Color male=inactive;
-Color female=inactive;
+Color male = inactive;
+Color female = inactive;
 
-enum Gender{
+enum Gender {
   male,
   female,
 }
 
 
-const inactive=Color(0xFF1D1E33);
+const inactive = Color(0xFF1D1E33);
 const active = Color(0xFF2D2E43);
 
 
-void updateColor(Gender gender){
-if(gender==Gender.male){
-  if(male==inactive){
-    male=active;
-  }else{
-    male=inactive;
+void updateColor(Gender gender) {
+  if (gender == Gender.male) {
+    if (male == inactive) {
+      male = active;
+    } else {
+      male = inactive;
+    }
+  }
+  else if (gender == Gender.female) {
+    if (female == inactive) {
+      female = active;
+    } else {
+      female = inactive;
+    }
   }
 }
-else if(gender==Gender.female){
-  if(female==inactive){
-   female=active;
-  }else{
-    female=inactive;
-  }
-}
-
-}
-
-
 
 
 class ReusableCard extends StatelessWidget {
-  const ReusableCard({required this.colour, required this.cardChild}); // Named parameters with `required`
+  const ReusableCard(
+      {required this.colour, required this.cardChild}); // Named parameters with `required`
 
   final Color colour;
   final Widget cardChild;
@@ -60,6 +60,10 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
+  int height = 180;
+  int weight = 40;
+  int age=15;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,10 +83,9 @@ class _InputPageState extends State<InputPage> {
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       setState(() {
                         updateColor(Gender.male);
-
                       });
                     },
 
@@ -110,12 +113,10 @@ class _InputPageState extends State<InputPage> {
                   ),
                 ),
                 Expanded(
-
                   child: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       setState(() {
                         updateColor(Gender.female);
-
                       });
                     },
 
@@ -153,32 +154,53 @@ class _InputPageState extends State<InputPage> {
                   child: ReusableCard(
                     colour: Color(0xFF1D1E33),
                     cardChild: Column(
-                      mainAxisAlignment:MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Height',
-                        style: TextStyle(
-                          fontSize: 30,
-                        ),
+                        Text('HEIGHT',
+                          style: TextStyle(
+                            fontSize: 30,
+                          ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.baseline,
                           textBaseline: TextBaseline.alphabetic,
                           children: [
-                            Text('180',
-                            style: TextStyle(
-                              fontSize: 50,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            Text(height.toString(),
+                              style: TextStyle(
+                                fontSize: 50,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             Text('cm',
-                            style: TextStyle(
-                              fontSize: 30,
-                            ),)
+                              style: TextStyle(
+                                fontSize: 30,
+                              ),)
                           ],
                         ),
+                        SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                              inactiveTrackColor: Color(0xFF8D8ED9),
+                              activeTrackColor: Colors.blueGrey,
+                              thumbShape: RoundSliderThumbShape(
+                                  enabledThumbRadius: 15,
+                                  pressedElevation: 6.5),
+                              overlayShape: RoundSliderOverlayShape(
+                                  overlayRadius: 30),
+                              thumbColor: Colors.pinkAccent,
+                              overlayColor: Color(0x15EB1555)
 
-
+                          ),
+                          child: Slider(value: height.toDouble(),
+                            min: 120,
+                            max: 220,
+                            onChanged: (double value) {
+                              setState(() {
+                                height = value.round();
+                              });
+                            },
+                          ),
+                        )
 
 
                       ],
@@ -195,15 +217,91 @@ class _InputPageState extends State<InputPage> {
                 Expanded(
                   child: ReusableCard(
                     colour: Color(0xFF1D1E33),
-                    cardChild: Column(),
+                    cardChild: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('WEIGHT',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        Text(weight.toString(),
+                          style: TextStyle(fontSize: 50,
+                            fontWeight: FontWeight.bold,),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            FloatingActionButton(
+                              backgroundColor: Color(0xFF4C4F5E),
+                              child: Icon(FontAwesomeIcons.minus, color: Colors.white),
+                              onPressed: () {
+                                setState(() {
+                                  weight--;
+                                });
+                              },
+                            ),
+                            SizedBox(width: 20,),
+                            FloatingActionButton(
+                                backgroundColor: Color(0xFF4C4F5E),
+                                child: Icon(FontAwesomeIcons.plus, color: Colors.white,),
+                                onPressed: () {
+                                  setState(() {
+                                    weight++;
+                                  }
+                                  );
+                                },
+                            ),
+                          ],
+                        )
+
+                      ],
+                    ),
+
                   ),
                 ),
                 Expanded(
                   child: ReusableCard(
                     colour: Color(0xFF1D1E33),
-                    cardChild: Column(),
+                    cardChild: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('AGE',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        Text(age.toString(),
+                          style: TextStyle(fontSize: 50,
+                            fontWeight: FontWeight.bold,),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            FloatingActionButton(
+                              backgroundColor: Color(0xFF4C4F5E),
+                              child: Icon(FontAwesomeIcons.minus, color: Colors.white),
+                              onPressed: () {
+                                setState(() {
+                                  age--;
+                                });
+                              },
+                            ),
+                            SizedBox(width: 20,),
+                            FloatingActionButton(
+                              backgroundColor: Color(0xFF4C4F5E),
+                              child: Icon(FontAwesomeIcons.plus, color: Colors.white,),
+                              onPressed: () {
+                                setState(() {
+                                  age++;
+                                }
+                                );
+                              },
+                            ),
+                          ],
+                        )
+
+                      ],
+                    ),
+
                   ),
-                ),
+                )
               ],
             ),
           ),
